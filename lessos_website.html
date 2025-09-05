@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>قائمة بأسهم تكشف نص وروابط</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --card: #111827;
+      --muted: #9ca3af;
+      --text: #f8fafc;
+      --accent: #22d3ee;
+      --ring: rgba(34,211,238,.35);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Naskh Arabic UI", Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 80% -10%, #1e293b 10%, transparent 60%), var(--bg);
+      color: var(--text);
+      display: grid; place-items: start center; min-height: 100vh; padding: 40px 16px;
+    }
+    .wrap { width: min(700px, 100%); }
+    .title { font-size: 28px; margin: 0 0 16px; }
+    .subtitle { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+
+    .accordion { display: grid; gap: 12px; }
+
+    .item { background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
+            border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius); overflow: hidden; }
+
+    .trigger { width: 100%; text-align: inherit; display: grid; grid-template-columns: 32px 1fr auto; gap: 12px; align-items: center;
+               background: transparent; border: 0; color: inherit; padding: 14px 16px; cursor: pointer; font-size: 16px; }
+    .trigger:hover { background: rgba(255,255,255,.03); }
+    .trigger:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: var(--radius); }
+
+    .arrow { width: 18px; height: 18px; transition: transform .25s ease; transform-origin: center; }
+    .item[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+
+    .label { font-weight: 600; }
+    .hint { font-size: 12px; color: var(--muted); }
+
+    .panel { display: grid; gap: 10px; padding: 0 16px 16px 16px; border-top: 1px dashed rgba(255,255,255,.12); }
+    .panel[hidden] { display: none; }
+
+    .panel p { margin: 10px 0 0 0; line-height: 1.8; }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .link-btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; border: 1px solid rgba(255,255,255,.14);
+                padding: 10px 14px; border-radius: 999px; font-weight: 600; font-size: 14px; }
+    .link-btn:hover { border-color: rgba(255,255,255,.28); }
+    .link-btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+    .link-btn .dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+
+    .panel-inner { overflow: clip; transition: grid-template-rows .25s ease; display: grid; grid-template-rows: 1fr; }
+    .panel[hidden] .panel-inner { grid-template-rows: 0fr; }
+    .panel-content { min-height: 0; }
+
+    /* ستايل الأزرار */
+    .control-buttons {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .control-buttons button {
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      padding: 10px 16px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .control-buttons button:hover {
+      border-color: rgba(255,255,255,.3);
+      background: rgba(255,255,255,.05);
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" aria-label="قائمة روابط قابلة للفتح">
+    <h1 class="title">click on the arrow to view subject test link.</h1>
+    <p class="subtitle">click on any link to go to subject test.</p>
+
+    <section class="accordion" id="accordion">
+      <!-- مثال على عنصر -->
+      <article class="item" aria-expanded="false">
+        <button class="trigger" aria-controls="panel-1" aria-expanded="false">
+          <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l10 7-10 7V5z" fill="currentColor"/></svg>
+          <div class="label">Math Lessons</div>
+          <div class="hint">اضغط لعرض التفاصيل</div>
+        </button>
+        <div id="panel-1" class="panel" hidden>
+          <div class="panel-inner">
+            <div class="panel-content">
+              <p>lesson 1.</p>
+              <div class="links">
+                <a class="link-btn" href="https://forms.cloud.microsoft/r/86LJvjibsw" target="_blank" rel="noopener noreferrer">
+                  <span class="dot"></span>
+                  الذهاب إلى الرابط
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- أزرار التحكم -->
+    <div class="control-buttons">
+      <button id="addBtn">➕ إضافة عنصر</button>
+      <button id="editBtn">✏️ تعديل اسم عنصر</button>
+      <button id="deleteBtn">🗑️ حذف عنصر</button>
+      <button id="addLinkBtn">➕ إضافة رابط</button>
+      <button id="editLinkBtn">✏️ تعديل رابط</button>
+      <button id="deleteLinkBtn">🗑️ حذف رابط</button>
+    </div>
+  </main>
+
+  <script>
+    const accordion = document.getElementById('accordion');
+
+    // فتح/إغلاق العنصر
+    accordion.addEventListener('click', (e) => {
+      const trigger = e.target.closest('.trigger');
+      if (!trigger) return;
+      const item = trigger.closest('.item');
+      const panel = document.getElementById(trigger.getAttribute('aria-controls'));
+      const isOpen = item.getAttribute('aria-expanded') === 'true';
+
+      accordion.querySelectorAll('.item[aria-expanded="true"]').forEach(openItem => {
+        if (openItem !== item) {
+          openItem.setAttribute('aria-expanded', 'false');
+          const btn = openItem.querySelector('.trigger');
+          const pnl = document.getElementById(btn.getAttribute('aria-controls'));
+          btn.setAttribute('aria-expanded', 'false');
+          pnl.hidden = true;
+        }
+      });
+
+      item.setAttribute('aria-expanded', String(!isOpen));
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+    });
+
+    accordion.querySelectorAll('.trigger').forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+
+    // إضافة عنصر
+    document.getElementById("addBtn").addEventListener("click", () => {
+      const name = prompt("اكتب اسم العنصر الجديد:");
+      if (!name) return;
+      const id = "panel-" + (accordion.children.length + 1);
+      const article = document.createElement("article");
+      article.className = "item";
+      article.setAttribute("aria-expanded", "false");
+      article.innerHTML = `
+        <button class="trigger" aria-controls="${id}" aria-expanded="false">
+          <svg class="arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l10 7-10 7V5z" fill="currentColor"/></svg>
+          <div class="label">${name}</div>
+          <div class="hint">تفاصيل إضافية</div>
+        </button>
+        <div id="${id}" class="panel" hidden>
+          <div class="panel-inner">
+            <div class="panel-content">
+              <p>هذا نص العنصر ${name}.</p>
+              <div class="links">
+                <a class="link-btn" href="#" target="_blank" rel="noopener noreferrer">
+                  <span class="dot"></span>
+                  رابط جديد
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      accordion.appendChild(article);
+    });
+
+    // تعديل عنصر
+    document.getElementById("editBtn").addEventListener("click", () => {
+      const num = prompt("اكتب رقم العنصر الذي تريد تعديله:");
+      if (!num) return;
+      const item = accordion.children[num - 1];
+      if (!item) return alert("العنصر غير موجود!");
+      const newName = prompt("اكتب الاسم الجديد:");
+      if (!newName) return;
+      item.querySelector(".label").textContent = newName;
+      item.querySelector(".panel-content p").textContent = `هذا نص العنصر ${newName}.`;
+    });
+
+    // حذف عنصر
+    document.getElementById("deleteBtn").addEventListener("click", () => {
+      const num = prompt("اكتب رقم العنصر الذي تريد حذفه:");
+      if (!num) return;
+      const item = accordion.children[num - 1];
+      if (!item) return alert("العنصر غير موجود!");
+      item.remove();
+    });
+
+    // إضافة رابط
+    document.getElementById("addLinkBtn").addEventListener("click", () => {
+      const num = prompt("اكتب رقم العنصر الذي تريد إضافة رابط فيه:");
+      if (!num) return;
+      const item = accordion.children[num - 1];
+      if (!item) return alert("العنصر غير موجود!");
+      const name = prompt("اكتب اسم الرابط:");
+      const url = prompt("اكتب الرابط (URL):");
+      if (!name || !url) return;
+      const link = document.createElement("a");
+      link.className = "link-btn";
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.innerHTML = `<span class="dot"></span>${name}`;
+      item.querySelector(".links").appendChild(link);
+    });
+
+    // تعديل رابط
+    document.getElementById("editLinkBtn").addEventListener("click", () => {
+      const num = prompt("اكتب رقم العنصر الذي يحتوي على الرابط:");
+      if (!num) return;
+      const item = accordion.children[num - 1];
+      if (!item) return alert("العنصر غير موجود!");
+      const links = item.querySelectorAll(".links a");
+      if (links.length === 0) return alert("لا يوجد روابط في هذا العنصر!");
+      let list = "";
+      links.forEach((l, i) => { list += `${i + 1}: ${l.textContent.trim()}\n`; });
+      const linkNum = prompt("اختر رقم الرابط للتعديل:\n" + list);
+      if (!linkNum) return;
+      const link = links[linkNum - 1];
+      if (!link) return alert("الرابط غير موجود!");
+      const newName = prompt("اكتب الاسم الجديد:", link.textContent.trim());
+      const newUrl = prompt("اكتب الرابط الجديد:", link.href);
+      if (!newName || !newUrl) return;
+      link.textContent = "";
+      link.innerHTML = `<span class="dot"></span>${newName}`;
+      link.href = newUrl;
+    });
+
+    // حذف رابط
+    document.getElementById("deleteLinkBtn").addEventListener("click", () => {
+      const num = prompt("اكتب رقم العنصر الذي يحتوي على الرابط:");
+      if (!num) return;
+      const item = accordion.children[num - 1];
+      if (!item) return alert("العنصر غير موجود!");
+      const links = item.querySelectorAll(".links a");
+      if (links.length === 0) return alert("لا يوجد روابط في هذا العنصر!");
+      let list = "";
+      links.forEach((l, i) => { list += `${i + 1}: ${l.textContent.trim()}\n`; });
+      const linkNum = prompt("اختر رقم الرابط للحذف:\n" + list);
+      if (!linkNum) return;
+      const link = links[linkNum - 1];
+      if (!link) return alert("الرابط غير موجود!");
+      link.remove();
+    });
+  </script>
+</body>
+</html>
