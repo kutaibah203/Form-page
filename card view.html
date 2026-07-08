@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eng. Tharwat Akraa - ARC | بطاقة عمل</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .card-wrapper img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .hotspot {
+    position: absolute;
+    cursor: pointer;
+    border-bottom: 2px solid #1a73e8;
+  }
+  .hotspot:hover {
+    background: rgba(26,115,232,0.08);
+  }
+
+  /* مواقع النقاط الفعالة كنسب مئوية من أبعاد الصورة الأصلية 1600×913 */
+  .phone {
+    left: 5.6%;
+    top: 85.2%;
+    width: 19.4%;
+    height: 3.7%;
+  }
+  .website {
+    left: 36.9%;
+    top: 85.2%;
+    width: 17.5%;
+    height: 3.7%;
+  }
+  .email {
+    left: 36.9%;
+    top: 91.6%;
+    width: 17.5%;
+    height: 3.7%;
+  }
+</style>
+</head>
+<body>
+
+<div class="card-wrapper">
+  <img src="https://kutaibah203.github.io/arc26-sa/Card.jpg" alt="Eng. Tharwat Akraa - ARC Business Card">
+
+  <!-- رقم الهاتف: يفتح تطبيق الاتصال -->
+  <a class="hotspot phone" href="tel:+966541291254" aria-label="اتصال بالهاتف"></a>
+
+  <!-- الموقع الإلكتروني: يفتح المتصفح -->
+  <a class="hotspot website" href="https://www.arc26-sa.com" target="_blank" rel="noopener noreferrer" aria-label="زيارة الموقع الإلكتروني"></a>
+
+  <!-- البريد الإلكتروني: يفتح تطبيق البريد -->
+  <a class="hotspot email" href="mailto:Info@ARC26-sa.com" aria-label="إرسال بريد إلكتروني"></a>
+</div>
+
+</body>
+</html>
