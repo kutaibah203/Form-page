@@ -130,6 +130,8 @@
     box-shadow:0 10px 24px -8px rgba(232,135,30,0.55);
     transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
     cursor:pointer;
+    border:none;
+    font-family:inherit;
   }
   .cta-button:hover{
     transform:translateY(-2px);
@@ -213,6 +215,64 @@
   .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
   .footer-row .brand{font-size:1.15rem;}
   footer p{color:var(--steel-light);font-size:0.85rem;}
+  .footer-meta{text-align:left;}
+  .footer-links{
+    display:flex;align-items:center;gap:8px;justify-content:flex-end;
+    margin-top:6px;font-size:0.85rem;
+  }
+  .footer-links a{color:var(--steel-light);font-weight:600;transition:color .2s;}
+  .footer-links a:hover{color:var(--amber-dark);text-decoration:underline;}
+  .footer-links span{color:var(--line);}
+
+  /* -------- register modal -------- */
+  .modal-overlay{
+    display:none;
+    position:fixed;inset:0;z-index:100;
+    background:rgba(28,37,48,0.6);
+    align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--paper);
+    border-radius:18px;
+    max-width:440px;width:100%;
+    padding:32px 28px 28px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.4);
+  }
+  .modal-close{
+    position:absolute;top:14px;left:14px;
+    width:32px;height:32px;border-radius:50%;
+    background:var(--cream-2);border:none;
+    font-size:1.2rem;line-height:1;color:var(--steel);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{background:var(--line);}
+  .modal-box h3{
+    font-size:1.25rem;margin-bottom:16px;color:var(--charcoal);
+  }
+  .modal-check{
+    display:flex;align-items:flex-start;gap:10px;
+    background:var(--cream-2);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;margin-bottom:22px;
+    cursor:pointer;
+  }
+  .modal-check input{
+    margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:var(--amber-dark);
+  }
+  .modal-check span{font-size:0.9rem;color:var(--steel);}
+  .modal-check a{color:var(--amber-dark);font-weight:700;text-decoration:underline;}
+  .modal-continue{
+    width:100%;justify-content:center;
+  }
+  .modal-continue:disabled{
+    opacity:0.45;cursor:not-allowed;box-shadow:none;transform:none;
+  }
+  .modal-continue:disabled:hover{
+    transform:none;box-shadow:none;background:var(--amber);
+  }
 
   /* -------- responsive -------- */
   @media (max-width:980px){
@@ -227,6 +287,9 @@
     .peg-row{grid-template-columns:repeat(2,1fr);}
     .section-head h2{font-size:1.7rem;}
     .final-cta{padding:50px 22px;border-radius:18px;}
+    .footer-row{flex-direction:column;align-items:flex-start;}
+    .footer-meta{text-align:right;}
+    .footer-links{justify-content:flex-start;}
   }
 
   :focus-visible{outline:3px solid var(--amber-dark);outline-offset:2px;}
@@ -249,7 +312,7 @@
       <a href="#trades">التخصصات</a>
       <a href="#benefits">المميزات</a>
     </nav>
-    <a target="_blank" class="nav-cta" href="https://forms.cloud.microsoft/r/VZ5Fj2NzqF">سجّل مجاناً</a>
+    <button type="button" class="nav-cta js-register">سجّل مجاناً</button>
   </div>
 </header>
 
@@ -263,10 +326,10 @@
         	<h1 id="HI"><span class="hl">فرصة ذهبية</span><br> اعمل بحرفتك..<br> وسع قاعدة عملاءك..<br> نمِّ أعمالك بسهولة وأمان..</h1>
         	<p class="lead">سباك، كهربائي، فني تكييف، مبلّط، دهان، نجار، متعدد المهارات أو غيرها من المهن.. <br>سجّل بياناتك الآن، وسيقوم فريقنا بالتواصل معك. <br> سجل وزد دخلك!</p>
         	<div class="hero-actions">
-          <a target="_blank" href="https://forms.cloud.microsoft/r/VZ5Fj2NzqF" class="cta-button" id="main-cta">
+          <button type="button" class="cta-button js-register" id="main-cta">
             سجل مجاناً الآن
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          </a>
+          </button>
           <span class="hero-note">بدون رسوم اشتراك · والتسجيل أقل من دقيقة</span>
         </div>
         </div>
@@ -349,10 +412,10 @@
       <div class="final-cta pegboard-bg">
         <h2>ايش تنتظر؟ سجل الآن!</h2>
         <p>التسجيل مجاني ولا يأخذ الكثير من وقتك. سجل ودعنا نبني المستقبل بنجاح!</p>
-        <a target="_blank" href="https://forms.cloud.microsoft/r/VZ5Fj2NzqF" class="cta-button">
+        <button type="button" class="cta-button js-register">
           سجل مجاناً الآن
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-        </a>
+        </button>
       </div>
     </div>
   </section>
@@ -366,8 +429,166 @@
       </span>
       الصيانة المنزلية الموثوقة
     </div>
-    <p>© جميع الحقوق محفوظة لدى الصيانة المنزلية الموثوقة.</p>
+    <div class="footer-meta">
+      <p>© جميع الحقوق محفوظة لدى الصيانة المنزلية الموثوقة.</p>
+      <div class="footer-links">
+        <a href="/Form-page/Privacy-Policy" target="_blank">سياسة الخصوصية</a>
+        <span>·</span>
+        <a href="/Form-page/Terms" target="_blank">شروط الاستخدام</a>
+      </div>
+    </div>
   </div>
 </footer>
+
+<!-- ============ REGISTER CONSENT MODAL ============ -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="modalClose" aria-label="إغلاق">&times;</button>
+    <h3>متابعة التسجيل</h3>
+    <label class="modal-check">
+      <input type="checkbox" id="agreeCheckbox">
+      <span>
+        بالمتابعة فإنك تقر بأنك اطلعت على
+        <a href="/Form-page/Privacy Policy" target="_blank" id="privacyLink">سياسة الخصوصية</a>
+        و
+        <a href="/Form-page/Terms" target="_blank" id="termsLink">شروط الاستخدام</a>
+        ووافقت عليها
+      </span>
+    </label>
+    <button type="button" class="cta-button modal-continue" id="continueBtn" disabled>
+      متابعة إلى التسجيل
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var REGISTER_URL = 'https://forms.cloud.microsoft/r/VZ5Fj2NzqF';
+
+  var CONSENT_LOG_URL = 'https://script.google.com/macros/s/AKfycbzPOUXWohKg5IDlG4S7VuEHLmN_5GHV85ck_VE-nx6No8E96d8-iZJEKwWA6jfMveFJ/exec';
+
+  var PRIVACY_VERSION = '2026-07-17';
+  var TERMS_VERSION = '2026-07-17';
+
+  var modal = document.getElementById('registerModal');
+  var checkbox = document.getElementById('agreeCheckbox');
+  var continueBtn = document.getElementById('continueBtn');
+  var closeBtn = document.getElementById('modalClose');
+  var consentLogged = false;
+  var CONSENT_STORAGE_KEY = 'arc_consent_status';
+
+  function pad(n){ return n < 10 ? '0' + n : String(n); }
+
+  function hasStoredConsent(){
+    try{
+      var raw = localStorage.getItem(CONSENT_STORAGE_KEY);
+      if(!raw) return false;
+      var saved = JSON.parse(raw);
+      return saved.privacyVersion === PRIVACY_VERSION && saved.termsVersion === TERMS_VERSION;
+    }catch(err){
+      return false;
+    }
+  }
+
+  function storeConsent(){
+    try{
+      localStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify({
+        privacyVersion: PRIVACY_VERSION,
+        termsVersion: TERMS_VERSION,
+        storedAt: new Date().toISOString()
+      }));
+    }catch(err){ /* localStorage غير متاح، لا مشكلة */ }
+  }
+
+  function getBrowserInfo(){
+    var ua = navigator.userAgent;
+    var m;
+    if (m = ua.match(/Edg\/([\d.]+)/)) return 'Edge ' + m[1].split('.')[0];
+    if (m = ua.match(/OPR\/([\d.]+)/)) return 'Opera ' + m[1].split('.')[0];
+    if (m = ua.match(/Chrome\/([\d.]+)/)) return 'Chrome ' + m[1].split('.')[0];
+    if (m = ua.match(/Firefox\/([\d.]+)/)) return 'Firefox ' + m[1].split('.')[0];
+    if (m = ua.match(/Version\/([\d.]+).*Safari/)) return 'Safari ' + m[1].split('.')[0];
+    return 'Unknown';
+  }
+
+  function getOSInfo(){
+    var ua = navigator.userAgent;
+    if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+    if (/Windows NT/.test(ua)) return 'Windows';
+    if (/Mac OS X/.test(ua)) return 'macOS';
+    if (/Android/.test(ua)) return 'Android';
+    if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Unknown';
+  }
+
+  function logConsent(){
+    var now = new Date();
+    var payload = {
+      acceptedPrivacy: 'Yes',
+      acceptedTerms: 'Yes',
+      date: now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()),
+      time: pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()),
+      browser: getBrowserInfo(),
+      operatingSystem: getOSInfo(),
+      privacyVersion: PRIVACY_VERSION,
+      termsVersion: TERMS_VERSION
+    };
+    fetch(CONSENT_LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch(function(err){ console.error('تعذر تسجيل الموافقة:', err); });
+    storeConsent();
+  }
+
+  function openModal(){
+    checkbox.checked = false;
+    continueBtn.disabled = true;
+    consentLogged = false;
+    modal.classList.add('open');
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+  }
+
+  document.querySelectorAll('.js-register').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if(hasStoredConsent()){
+        window.open(REGISTER_URL, '_blank');
+      }else{
+        openModal();
+      }
+    });
+  });
+
+  checkbox.addEventListener('change', function(){
+    continueBtn.disabled = !checkbox.checked;
+    if(checkbox.checked && !consentLogged){
+      consentLogged = true;
+      logConsent();
+    }
+  });
+
+  continueBtn.addEventListener('click', function(){
+    if(checkbox.checked){
+      window.open(REGISTER_URL, '_blank');
+      closeModal();
+    }
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', function(e){
+    if(e.target === modal){ closeModal(); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeModal(); }
+  });
+})();
+</script>
 
 </body></html>
