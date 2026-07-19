@@ -1,0 +1,550 @@
+<html lang="ar" dir="rtl"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الصيانة المنزلية الموثوقة | انضم كمزوّد خدمة صيانة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/x-icon" href="https://www.arc26-sa.com/Assets/page%20logo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Rubik:ital,wght@0,300..900;1,300..900&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1C2530;
+    --charcoal-2:#242F3D;
+    --amber:#E8871E;
+    --amber-dark:#C86E12;
+    --cream:#F7F3EC;
+    --cream-2:#EFE9DC;
+    --steel:#48586B;
+    --steel-light:#7C8AA0;
+    --green:#2F8F5B;
+    --line:#DCD5C8;
+    --paper:#FFFDF9;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+    background:var(--cream);
+    color:var(--charcoal);
+    line-height:1.7;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Cairo', sans-serif;
+    font-weight:800;
+    line-height:1.25;
+  }
+  a{text-decoration:none;color:inherit;}
+  img,svg{display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+  /* -------- pegboard texture -------- */
+  .pegboard-bg{
+    background-color:var(--charcoal);
+    background-image:radial-gradient(var(--steel-light) 1.3px, transparent 1.3px);
+    background-size:26px 26px;
+    background-position:-4px -4px;
+  }
+
+  /* -------- header -------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(247,243,236,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1180px;margin:0 auto;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    font-family:'Cairo',sans-serif;font-weight:900;font-size:1.4rem;
+    color:var(--charcoal);
+  }
+  .brand-mark{
+    width:34px;height:34px;border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+    flex-shrink:0;
+  }
+  .brand-mark img{width:100%;height:100%;object-fit:contain;}
+  .nav-links{display:flex;gap:32px;font-weight:600;font-size:0.98rem;color:var(--steel);}
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--amber-dark);}
+  .nav-cta{
+    background:var(--charcoal);color:var(--cream);
+    padding:11px 22px;border-radius:8px;font-weight:700;font-size:0.92rem;
+    transition:transform .15s, background .2s;
+    border:none;cursor:pointer;font-family:inherit;
+    display:inline-block;
+  }
+  .nav-cta:hover{background:var(--amber-dark);transform:translateY(-1px);}
+  .menu-btn{display:none;background:none;border:none;cursor:pointer;}
+
+  /* -------- hero -------- */
+  .hero{
+    position:relative;padding:60px 0 100;overflow:hidden;
+  }
+  .hero-grid{
+    display:block;
+  }
+  .hero-grid > div{
+    max-width:680px;
+    margin:0 auto;
+  }
+  #text{
+    text-align:center;
+    margin:0 auto;
+  }
+  #text .hero-actions{justify-content:center;}
+  #text .lead{margin-left:auto;margin-right:auto;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--cream-2);border:1px solid var(--line);
+    padding:7px 16px;border-radius:100px;
+    font-weight:700;font-size:0.85rem;color:var(--steel);
+    margin-bottom:22px;
+  }
+  .eyebrow-dot{width:8px;height:8px;border-radius:50%;background:var(--green);}
+  .hero h1{
+    font-size:3.1rem;color:var(--charcoal);margin-bottom:22px;
+    font-family:'Rubik', sans-serif;
+  }
+  .hero h1 .hl{
+    color:var(--amber-dark);position:relative;white-space:nowrap;
+  }
+  .hero h1 .hl::after{
+    content:"";position:absolute;right:0;left:0;bottom:2px;height:12px;
+    background:rgba(232,135,30,0.28);z-index:-1;border-radius:3px;
+  }
+  .hero p.lead{
+    font-size:1.15rem;color:var(--steel);max-width:550px;margin-bottom:34px;
+  }
+  .hero-actions{display:flex;flex-direction:column;align-items:center;gap:14px;}
+
+  .cta-button{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--amber);color:var(--charcoal);
+    font-family:'Cairo',sans-serif;font-weight:800;font-size:1.08rem;
+    padding:17px 34px;border-radius:10px;
+    box-shadow:0 10px 24px -8px rgba(232,135,30,0.55);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    cursor:pointer;
+    border:none;
+    font-family:inherit;
+  }
+  .cta-button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 30px -8px rgba(232,135,30,0.65);
+    background:#F0973A;
+  }
+  .cta-button svg{width:20px;height:20px;flex-shrink:0;}
+  .hero-note{font-size:0.88rem;color:var(--steel-light);font-weight:600;}
+
+  /* -------- section shared -------- */
+  section{padding:96px 0;}
+  .section-head{max-width:640px;margin-bottom:56px;}
+  .section-head.center{margin-left:auto;margin-right:auto;text-align:center;}
+  .section-eyebrow{
+    font-weight:700;color:var(--amber-dark);font-size:0.9rem;
+    letter-spacing:0.02em;margin-bottom:12px;display:block;
+  }
+  .section-head h2{font-size:2.3rem;color:var(--charcoal);margin-bottom:14px;}
+  .section-head p{color:var(--steel);font-size:1.05rem;}
+
+  /* -------- trades pegboard -------- */
+  .trades{background:var(--charcoal);color:var(--cream);position:relative;}
+  .trades .section-head h2{color:var(--cream);}
+  .trades .section-head p{color:var(--steel-light);}
+  .trades .section-eyebrow{color:var(--amber);}
+
+  .peg-row{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:18px;
+  }
+  .peg-card{
+    background:var(--charcoal-2);border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;padding:26px 14px 20px;text-align:center;
+    position:relative;transition:transform .2s ease, border-color .2s ease;
+  }
+  .peg-card:hover{transform:translateY(-6px);border-color:var(--amber);}
+  .peg-nail{
+    position:absolute;top:-9px;right:50%;transform:translateX(50%);
+    width:14px;height:14px;border-radius:50%;
+    background:var(--cream);border:3px solid var(--charcoal);
+  }
+  .peg-icon{
+    width:52px;height:52px;margin:6px auto 14px;
+    background:rgba(232,135,30,0.14);border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .peg-icon svg{width:26px;height:26px;stroke:var(--amber);}
+  .peg-card span{font-weight:700;font-size:0.92rem;}
+
+  /* -------- benefits -------- */
+  .benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;}
+  .benefit-card{
+    background:var(--paper);border:1px solid var(--line);border-radius:16px;
+    padding:32px 26px;transition:box-shadow .2s ease, transform .2s ease;
+  }
+  .benefit-card:hover{box-shadow:0 16px 32px -18px rgba(28,37,48,0.35);transform:translateY(-4px);}
+  .benefit-icon{
+    width:48px;height:48px;border-radius:12px;background:rgba(47,143,91,0.12);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+  }
+  .benefit-icon svg{width:24px;height:24px;stroke:var(--green);}
+  .benefit-card h3{font-size:1.15rem;margin-bottom:10px;color:var(--charcoal);}
+  .benefit-card p{color:var(--steel);font-size:0.95rem;}
+
+  /* -------- final cta -------- */
+  .final-cta{
+    background:var(--charcoal);color:var(--cream);text-align:center;
+    border-radius:26px;padding:70px 40px;margin:0 auto;max-width:1180px;
+    position:relative;overflow:hidden;
+  }
+  .final-cta::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(var(--steel-light) 1.3px, transparent 1.3px);
+    background-size:26px 26px;opacity:0.25;
+  }
+  .final-cta > *{position:relative;z-index:1;}
+  .final-cta h2{font-size:2.2rem;margin-bottom:14px;}
+  .final-cta p{color:var(--steel-light);font-size:1.05rem;margin-bottom:34px;max-width:480px;margin-inline:auto;}
+
+  /* -------- footer -------- */
+  footer{padding:44px 0 30px;border-top:1px solid var(--line);}
+  .footer-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+  .footer-row .brand{font-size:1.15rem;}
+  footer p{color:var(--steel-light);font-size:0.85rem;}
+
+  /* -------- register modal -------- */
+  .modal-overlay{
+    display:none;
+    position:fixed;inset:0;z-index:100;
+    background:rgba(28,37,48,0.6);
+    align-items:center;justify-content:center;
+    padding:20px;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--paper);
+    border-radius:18px;
+    max-width:440px;width:100%;
+    padding:32px 28px 28px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.4);
+  }
+  .modal-close{
+    position:absolute;top:14px;left:14px;
+    width:32px;height:32px;border-radius:50%;
+    background:var(--cream-2);border:none;
+    font-size:1.2rem;line-height:1;color:var(--steel);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{background:var(--line);}
+  .modal-box h3{
+    font-size:1.25rem;margin-bottom:16px;color:var(--charcoal);
+  }
+  .modal-check{
+    display:flex;align-items:flex-start;gap:10px;
+    background:var(--cream-2);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;margin-bottom:22px;
+    cursor:pointer;
+  }
+  .modal-check input{
+    margin-top:3px;width:18px;height:18px;flex-shrink:0;cursor:pointer;accent-color:var(--amber-dark);
+  }
+  .modal-check span{font-size:0.9rem;color:var(--steel);}
+  .modal-check a{color:var(--amber-dark);font-weight:700;text-decoration:underline;}
+  .modal-continue{
+    width:100%;justify-content:center;
+  }
+  .modal-continue:disabled{
+    opacity:0.45;cursor:not-allowed;box-shadow:none;transform:none;
+  }
+  .modal-continue:disabled:hover{
+    transform:none;box-shadow:none;background:var(--amber);
+  }
+
+  /* -------- responsive -------- */
+  @media (max-width:980px){
+    .peg-row{grid-template-columns:repeat(3,1fr);}
+  }
+  @media (max-width:640px){
+    .nav-links{display:none;}
+    .menu-btn{display:block;}
+    .hero{padding:50px 0 60px;}
+    .hero h1{font-size:2.1rem;}
+    .benefits-grid{grid-template-columns:1fr;}
+    .peg-row{grid-template-columns:repeat(2,1fr);}
+    .section-head h2{font-size:1.7rem;}
+    .final-cta{padding:50px 22px;border-radius:18px;}
+  }
+
+  :focus-visible{outline:3px solid var(--amber-dark);outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <span class="brand-mark">
+        <img src="https://www.arc26-sa.com/Assets/page%20logo.png" alt="الشعار">
+      </span>
+      الصيانة المنزلية الموثوقة
+    </div>
+    <nav class="nav-links">
+      <a href="#trades">التخصصات</a>
+      <a href="#benefits">المميزات</a>
+    </nav>
+    <button type="button" class="nav-cta js-register">سجّل مجاناً</button>
+  </div>
+</header>
+
+<main>
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>التسجيل كمزود خدمة صيانة</div>
+    <div class="wrap hero-grid">
+      <div>
+        <div id="text">
+        	<h1 id="HI"><span class="hl">فرصة ذهبية</span><br> اعمل بحرفتك..<br> وسع قاعدة عملاءك..<br> نمِّ أعمالك بسهولة وأمان..</h1>
+        	<p class="lead">سباك، كهربائي، فني تكييف، مبلّط، دهان، نجار، متعدد المهارات أو غيرها من المهن.. <br>سجّل بياناتك الآن، وسيقوم فريقنا بالتواصل معك. <br> سجل وزد دخلك!</p>
+        	<div class="hero-actions">
+          <button type="button" class="cta-button js-register" id="main-cta">
+            سجل مجاناً الآن
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+          </button>
+          <span class="hero-note">بدون رسوم اشتراك · والتسجيل أقل من دقيقة</span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRADES PEGBOARD ============ -->
+  <section class="trades pegboard-bg" id="trades">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-eyebrow">التخصصات</span>
+        <h2>مهما كانت حرفتك، يمكنك الانضمام إلينا</h2>
+        <p>المنصة مفتوحة لجميع تخصصات الصيانة، وتقدر تختار أكثر من تخصص عند التسجيل.</p>
+      </div>
+      <div class="peg-row">
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7l3-3 4 4-3 3M7 14l-4 4 4 4 4-4M9.5 11.5l-6 6M14.5 6.5l3 3M4 20l7-7"></path></svg></div>
+          <span>سباكة</span>
+        </div>
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 11-13h-8l1-7z"></path></svg></div>
+          <span>كهرباء</span>
+        </div>
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="10" rx="2"></rect><path d="M7 20h10M9 16v4M15 16v4"></path></svg></div>
+          <span>تكييف وتبريد</span>
+        </div>
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg></div>
+          <span>تبليط</span>
+        </div>
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21c3-1 5-3 7-6l9-9-4-4-9 9c-3 2-5 4-6 7z"></path><path d="M14 4l4 4"></path></svg></div>
+          <span>دهانات</span>
+        </div>
+        <div class="peg-card"><div class="peg-nail"></div>
+          <div class="peg-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-6a4 4 0 014-4h8a4 4 0 014 4v6M9 11V6a3 3 0 016 0v5"></path></svg></div>
+          <span>متعدد المهن أو غيرها</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BENEFITS ============ -->
+  <section id="benefits">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="section-eyebrow">ليش تنضم لنا؟</span>
+        <h2>كل اللي تحتاجه عشان تشتغل بثقة!</h2>
+        <p>صممنا المنصة عشان توفر وقتك، وتزيد دخلك مع كل طلب يوصلك.</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a12 12 0 0116 0"></path><path d="M7 11a8 8 0 0110 0"></path><path d="M10.5 14a3.5 3.5 0 013 0"></path><circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"></circle></svg></div>
+          <h3>وصول مباشر للعملاء</h3>
+          <p>استقبل طلبات الصيانة من العملاء المحتملين بشكل مباشر.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"></path><path d="M14 7h7v7"></path></svg></div>
+          <h3>زيادة الدخل</h3>
+          <p>فرص عمل متعددة وتنوع في العملاء والمشاريع.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"></path></svg></div>
+          <h3>تقييمات تزيد فرصك</h3>
+          <p>كل طلب = تقييمات أكثر، وكل ما كان تقيمك مرتفع زاد ظهورك للعملاء!</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></div>
+          <h3>طلبات مناسبة لك</h3>
+          <p>نوصّلك بطلبات صيانة في المناطق اللي تشتغل فيها، حسب تخصصك وأوقات تفرغك.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ============ FINAL CTA ============ -->
+  <section>
+    <div class="wrap">
+      <div class="final-cta pegboard-bg">
+        <h2>ايش تنتظر؟ سجل الآن!</h2>
+        <p>التسجيل مجاني ولا يأخذ الكثير من وقتك. سجل ودعنا نبني المستقبل بنجاح!</p>
+        <button type="button" class="cta-button js-register">
+          سجل مجاناً الآن
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="brand">
+      <span class="brand-mark" style="width:28px;height:28px;">
+        <img src="https://www.arc26-sa.com/Assets/page%20logo.png" alt="الشعار">
+      </span>
+      الصيانة المنزلية الموثوقة
+    </div>
+    <p>© جميع الحقوق محفوظة لدى الصيانة المنزلية الموثوقة.</p>
+  </div>
+</footer>
+
+<!-- ============ REGISTER CONSENT MODAL ============ -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="modalClose" aria-label="إغلاق">&times;</button>
+    <h3>متابعة التسجيل</h3>
+    <label class="modal-check">
+      <input type="checkbox" id="agreeCheckbox">
+      <span>
+        بالمتابعة فإنك تقر بأنك اطلعت على
+        <a href="/Form-page/Privacy Policy" target="_blank" id="privacyLink">سياسة الخصوصية</a>
+        و
+        <a href="/Form-page/Terms" target="_blank" id="termsLink">شروط الاستخدام</a>
+        ووافقت عليها
+      </span>
+    </label>
+    <button type="button" class="cta-button modal-continue" id="continueBtn" disabled>
+      متابعة إلى التسجيل
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  // رابط التسجيل محفوظ هنا فقط داخل الجافاسكربت، وليس كخاصية href ظاهرة في عناصر الأزرار
+  var REGISTER_URL = 'https://forms.cloud.microsoft/r/VZ5Fj2NzqF';
+
+  // رابط Google Apps Script لتسجيل الموافقة على السياسة والشروط
+  var CONSENT_LOG_URL = 'https://script.google.com/macros/s/AKfycbzPOUXWohKg5IDlG4S7VuEHLmN_5GHV85ck_VE-nx6No8E96d8-iZJEKwWA6jfMveFJ/exec';
+
+  // تاريخ آخر تحديث لكل وثيقة (يطابق "آخر تحديث" الظاهر في صفحتي السياسة والشروط)
+  var PRIVACY_VERSION = '2026-07-17';
+  var TERMS_VERSION = '2026-07-17';
+
+  var modal = document.getElementById('registerModal');
+  var checkbox = document.getElementById('agreeCheckbox');
+  var continueBtn = document.getElementById('continueBtn');
+  var closeBtn = document.getElementById('modalClose');
+  var consentLogged = false;
+
+  function pad(n){ return n < 10 ? '0' + n : String(n); }
+
+  function getBrowserInfo(){
+    var ua = navigator.userAgent;
+    var m;
+    if (m = ua.match(/Edg\/([\d.]+)/)) return 'Edge ' + m[1].split('.')[0];
+    if (m = ua.match(/OPR\/([\d.]+)/)) return 'Opera ' + m[1].split('.')[0];
+    if (m = ua.match(/Chrome\/([\d.]+)/)) return 'Chrome ' + m[1].split('.')[0];
+    if (m = ua.match(/Firefox\/([\d.]+)/)) return 'Firefox ' + m[1].split('.')[0];
+    if (m = ua.match(/Version\/([\d.]+).*Safari/)) return 'Safari ' + m[1].split('.')[0];
+    return 'Unknown';
+  }
+
+  function getOSInfo(){
+    var ua = navigator.userAgent;
+    if (/Windows NT 10/.test(ua)) return 'Windows 10/11';
+    if (/Windows NT/.test(ua)) return 'Windows';
+    if (/Mac OS X/.test(ua)) return 'macOS';
+    if (/Android/.test(ua)) return 'Android';
+    if (/iPhone|iPad|iPod/.test(ua)) return 'iOS';
+    if (/Linux/.test(ua)) return 'Linux';
+    return 'Unknown';
+  }
+
+  function logConsent(){
+    var now = new Date();
+    var payload = {
+      acceptedPrivacy: 'Yes',
+      acceptedTerms: 'Yes',
+      date: now.getFullYear() + '-' + pad(now.getMonth() + 1) + '-' + pad(now.getDate()),
+      time: pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds()),
+      browser: getBrowserInfo(),
+      operatingSystem: getOSInfo(),
+      privacyVersion: PRIVACY_VERSION,
+      termsVersion: TERMS_VERSION
+    };
+    fetch(CONSENT_LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload)
+    }).catch(function(err){ console.error('تعذر تسجيل الموافقة:', err); });
+  }
+
+  function openModal(){
+    checkbox.checked = false;
+    continueBtn.disabled = true;
+    consentLogged = false;
+    modal.classList.add('open');
+  }
+  function closeModal(){
+    modal.classList.remove('open');
+  }
+
+  document.querySelectorAll('.js-register').forEach(function(btn){
+    btn.addEventListener('click', openModal);
+  });
+
+  checkbox.addEventListener('change', function(){
+    continueBtn.disabled = !checkbox.checked;
+    if(checkbox.checked && !consentLogged){
+      consentLogged = true;
+      logConsent();
+    }
+  });
+
+  continueBtn.addEventListener('click', function(){
+    if(checkbox.checked){
+      window.open(REGISTER_URL, '_blank');
+      closeModal();
+    }
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', function(e){
+    if(e.target === modal){ closeModal(); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ closeModal(); }
+  });
+})();
+</script>
+
+</body></html>
