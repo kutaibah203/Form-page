@@ -263,8 +263,10 @@ async function deleteSection(id){
   state.sectionsLoaded=false;
 }
 async function getQuestions(sectionId){
-  const snap = await db.collection('questions').where('sectionId','==',sectionId).orderBy('createdAt','asc').get();
-  return snap.docs.map(d=>({id:d.id,...d.data()}));
+  const snap = await db.collection('questions').where('sectionId','==',sectionId).get();
+  const list = snap.docs.map(d=>({id:d.id,...d.data()}));
+  list.sort((a,b)=> (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+  return list;
 }
 async function getAllQuestions(){
   const snap = await db.collection('questions').get();
@@ -629,17 +631,22 @@ function closeModal(){ const m=document.getElementById('modalRoot'); if(m) m.rem
 async function startQuiz(sectionId){
   const cont = document.getElementById('app');
   cont.innerHTML = `<div class="loader">جارِ تجهيز الاختبار...</div>`;
-  let qs=[]; let secName='';
-  if(sectionId==='all'){
-    qs = await getAllQuestions();
-    secName='كل الأقسام';
-  }else{
-    qs = await getQuestions(sectionId);
-    const sec = state.sections.find(s=>s.id===sectionId);
-    secName = sec?sec.name:'';
+  try{
+    let qs=[]; let secName='';
+    if(sectionId==='all'){
+      qs = await getAllQuestions();
+      secName='كل الأقسام';
+    }else{
+      qs = await getQuestions(sectionId);
+      const sec = state.sections.find(s=>s.id===sectionId);
+      secName = sec?sec.name:'';
+    }
+    if(qs.length===0){ toast('لا توجد أسئلة في هذا القسم بعد'); nav('sections'); return; }
+    beginQuizSession(qs, secName, sectionId);
+  }catch(e){
+    console.error(e);
+    showRenderError(e);
   }
-  if(qs.length===0){ toast('لا توجد أسئلة في هذا القسم بعد'); nav('sections'); return; }
-  beginQuizSession(qs, secName, sectionId);
 }
 function beginQuizSession(questions, sectionName, sectionId){
   state.quiz = {
@@ -1095,67 +1102,80 @@ function renderAdminQuickAdd(){
   `;
 }
 let quickParsed = null;
-function parseQuickAdd(text){
-  const norm = text.replace(/\r/g,'');
-  const titleMatch = norm.match(/عنوان ورقم القسم:\s*([^\n]+)/);
-  if(!titleMatch) throw new Error('لم أجد سطر "عنوان ورقم القسم:"');
-  const titleLine = titleMatch[1].trim();
-  const parts = titleLine.split(/\s+/);
-  const secNumber = parts[0];
-  const secTitle = parts.slice(1).join(' ') || titleLine;
+function extractBetween(text, startLabel, endLabels){
+  // returns text right after startLabel up to the first occurrence of any endLabel (or end of string)
+  const startIdx = text.indexOf(startLabel);
+  if(startIdx===-1) return null;
+  const from = startIdx + startLabel.length;
+  let endIdx = text.length;
+  endLabels.forEach(lbl=>{
+    const idx = text.indexOf(lbl, from);
+    if(idx!==-1 && idx<endIdx) endIdx = idx;
+  });
+  return text.slice(from, endIdx).trim();
+}
+function parseQuickAdd(rawText){
+  // normalize: collapse all whitespace/newlines into single spaces so the parser
+  // works whether the admin writes each field on its own line or as continuous text.
+  const norm = rawText.replace(/\s+/g,' ').trim();
+
+  const titleRaw = extractBetween(norm, 'عنوان ورقم القسم:', ['نوع السؤال:']);
+  if(titleRaw===null) throw new Error('لم أجد "عنوان ورقم القسم:" في النص');
+  const titleParts = titleRaw.split(/\s+/);
+  const secNumber = titleParts[0] || '';
+  const secTitle = titleParts.slice(1).join(' ') || titleRaw;
 
   const blocks = norm.split(/(?=نوع السؤال:)/g).slice(1);
-  if(blocks.length===0) throw new Error('لم أجد أي سؤال (تأكد من كتابة "نوع السؤال:")');
+  if(blocks.length===0) throw new Error('لم أجد أي سؤال (تأكد من كتابة "نوع السؤال:" قبل كل سؤال)');
+
+  const ALL_LABELS = ['رقم السؤال:','المفردة الأولى:','المفردة الثانية:','النص:','السؤال:','الجملة:','الإجابات:'];
+
   const questions = blocks.map((block, bi)=>{
-    const typeMatch = block.match(/نوع السؤال:\s*([^\n]+)/);
-    const typeLabel = typeMatch? typeMatch[1].trim() : '';
+    const n = bi+1;
+    const typeLabel = extractBetween(block, 'نوع السؤال:', ['رقم السؤال:','الإجابات:']);
     const typeKey = Object.keys(QTYPES).find(k=>QTYPES[k].label===typeLabel);
-    if(!typeKey) throw new Error(`نوع السؤال غير معروف في السؤال رقم ${bi+1}: "${typeLabel}"`);
+    if(!typeKey) throw new Error(`نوع السؤال غير معروف في السؤال رقم ${n}: "${typeLabel}"`);
 
-    const answersSectionMatch = block.match(/الإجابات:\s*([\s\S]*)/);
-    const answersRaw = answersSectionMatch? answersSectionMatch[1].trim():'';
-    const answerLines = answersRaw.split('\n').map(l=>l.trim()).filter(l=>/^\d/.test(l));
-    if(answerLines.length<2) throw new Error(`إجابات غير كافية في السؤال رقم ${bi+1}`);
+    const answersIdx = block.indexOf('الإجابات:');
+    if(answersIdx===-1) throw new Error(`لم أجد "الإجابات:" في السؤال رقم ${n}`);
+    const header = block.slice(0, answersIdx);
+    const answersRaw = block.slice(answersIdx + 'الإجابات:'.length).trim();
+    if(!answersRaw) throw new Error(`قائمة الإجابات فارغة في السؤال رقم ${n}`);
 
-    let correctIndex = -1;
-    let answers, word1, word2, sentence, passage, question;
-
+    let word1,word2,sentence,passage,question;
     if(typeKey==='analogy'){
-      const w1m = block.match(/المفردة الأولى:\s*([^\n]+)/);
-      const w2m = block.match(/المفردة الثانية:\s*([^\n]+)/);
-      word1 = w1m? w1m[1].trim():''; word2 = w2m? w2m[1].trim():'';
-      answers = answerLines.map((line,i)=>{
-        const isCorrect = /---\s*هذه الإجابة الصحيحة/.test(line);
-        if(isCorrect) correctIndex=i;
-        const clean = line.replace(/---\s*هذه الإجابة الصحيحة/,'').trim();
-        const m1 = clean.match(/المفردة الأولى:\s*([^\n]+?)(?:\s{2,}|المفردة الثانية:)/);
-        const m2 = clean.match(/المفردة الثانية:\s*([^\n]+)$/);
-        return { w1: m1? m1[1].trim():'', w2: m2? m2[1].trim():'' };
+      word1 = extractBetween(header,'المفردة الأولى:',['المفردة الثانية:']) || '';
+      word2 = extractBetween(header,'المفردة الثانية:',[]) || '';
+    }else if(typeKey==='reading'){
+      const passageStart = header.indexOf('النص:');
+      const passageFrom = passageStart===-1? -1 : passageStart + 'النص:'.length;
+      const qLabelIdx = passageFrom===-1? -1 : header.indexOf('السؤال:', passageFrom);
+      passage = passageFrom===-1? '' : (qLabelIdx===-1? header.slice(passageFrom).trim() : header.slice(passageFrom, qLabelIdx).trim());
+      question = qLabelIdx===-1? '' : header.slice(qLabelIdx + 'السؤال:'.length).trim();
+    }else if(typeKey==='contextual_error' || typeKey==='sentence_completion'){
+      sentence = extractBetween(header,'الجملة:',[]) || '';
+    }
+
+    let answers, correctIndex=-1;
+    if(typeKey==='analogy'){
+      const chunks = answersRaw.split(/(?=[1-4]\s*المفردة الأولى:)/g).map(c=>c.trim()).filter(Boolean);
+      if(chunks.length<2) throw new Error(`تعذّر تقسيم إجابات التناظر في السؤال رقم ${n}`);
+      answers = chunks.map((chunk,i)=>{
+        if(/---\s*هذه الإجابة الصحيحة/.test(chunk)) correctIndex=i;
+        const w1 = extractBetween(chunk,'المفردة الأولى:',['المفردة الثانية:']) || '';
+        let w2 = extractBetween(chunk,'المفردة الثانية:',[]) || '';
+        w2 = w2.replace(/---\s*هذه الإجابة الصحيحة.*$/,'').trim();
+        return { w1, w2 };
       });
     }else{
-      answers = answerLines.map((line,i)=>{
-        const isCorrect = /---\s*هذه الإجابة الصحيحة/.test(line);
-        if(isCorrect) correctIndex=i;
-        let clean = line.replace(/---\s*هذه الإجابة الصحيحة/,'').trim();
-        clean = clean.replace(/^\d+\s*/, '');
-        return clean;
+      const chunks = answersRaw.split(/(?=[1-4]\s)/g).map(c=>c.trim()).filter(Boolean);
+      if(chunks.length<2) throw new Error(`تعذّر تقسيم الإجابات في السؤال رقم ${n} (تأكد من ترقيمها 1 2 3 4)`);
+      answers = chunks.map((chunk,i)=>{
+        if(/---\s*هذه الإجابة الصحيحة/.test(chunk)) correctIndex=i;
+        return chunk.replace(/^[1-4]\s*/,'').replace(/---\s*هذه الإجابة الصحيحة.*$/,'').trim();
       });
     }
-    if(correctIndex===-1) throw new Error(`لم أجد إجابة صحيحة معلّمة بـ "--- هذه الإجابة الصحيحة" في السؤال رقم ${bi+1}`);
-
-    if(typeKey==='reading'){
-      const passM = block.match(/النص:\s*([\s\S]*?)\nالسؤال:/);
-      const qM = block.match(/السؤال:\s*([^\n]+)/);
-      passage = passM? passM[1].trim():''; question = qM? qM[1].trim():'';
-    }
-    if(typeKey==='contextual_error'){
-      const sM = block.match(/الجملة:\s*([^\n]+)/);
-      sentence = sM? sM[1].trim():'';
-    }
-    if(typeKey==='sentence_completion'){
-      const sM = block.match(/الجملة:\s*([^\n]+)/);
-      sentence = sM? sM[1].trim():'';
-    }
+    if(correctIndex===-1) throw new Error(`لم أجد إجابة معلّمة بـ "--- هذه الإجابة الصحيحة" في السؤال رقم ${n}`);
 
     return { type:typeKey, answers, correctIndex, word1, word2, sentence, passage, question };
   });
@@ -1213,17 +1233,36 @@ async function render(){
   if(!state.userNumber){ app.innerHTML = renderLogin(); return; }
   app.innerHTML = `${renderTopbar()}${renderDrawer()}<div class="page" id="page-content"></div>`;
   const r = state.route;
-  if(r.name==='home') await renderHome();
-  else if(r.name==='sections') await renderSections();
-  else if(r.name==='wrong') await (async()=>{ await hydrateWithSections(); await renderWrong(); })();
-  else if(r.name==='saved') await (async()=>{ await hydrateWithSections(); await renderSaved(); })();
-  else if(r.name==='history') await renderHistory();
-  else if(r.name==='admin-sections') await renderAdminSections();
-  else if(r.name==='admin-section-edit') await renderAdminSectionEdit(r.params.id);
-  else if(r.name==='admin-question-add'){ questionDraftType = null; await renderAdminQuestionAdd(r.params.sectionId, r.params.questionId); }
-  else if(r.name==='admin-quick-add') renderAdminQuickAdd();
-  else if(r.name==='quiz') renderQuizScreen();
+  try{
+    if(r.name==='home') await renderHome();
+    else if(r.name==='sections') await renderSections();
+    else if(r.name==='wrong') await (async()=>{ await hydrateWithSections(); await renderWrong(); })();
+    else if(r.name==='saved') await (async()=>{ await hydrateWithSections(); await renderSaved(); })();
+    else if(r.name==='history') await renderHistory();
+    else if(r.name==='admin-sections') await renderAdminSections();
+    else if(r.name==='admin-section-edit') await renderAdminSectionEdit(r.params.id);
+    else if(r.name==='admin-question-add'){ questionDraftType = null; await renderAdminQuestionAdd(r.params.sectionId, r.params.questionId); }
+    else if(r.name==='admin-quick-add') renderAdminQuickAdd();
+    else if(r.name==='quiz') renderQuizScreen();
+  }catch(e){
+    console.error('render error:', e);
+    showRenderError(e);
+  }
 }
+function showRenderError(e){
+  const cont = document.getElementById('page-content') || document.getElementById('app');
+  if(!cont) return;
+  cont.innerHTML = `<div class="page"><div class="card" style="border-color:var(--danger);">
+    <b style="color:var(--danger);">حدث خطأ</b>
+    <p class="sub" style="margin-top:8px;">${escapeHtml(e.message||'خطأ غير معروف')}</p>
+    <button class="btn btn-primary" style="margin-top:12px;" onclick="render()">إعادة المحاولة</button>
+  </div></div>`;
+}
+window.addEventListener('unhandledrejection', function(ev){
+  console.error('unhandled:', ev.reason);
+  const err = ev.reason instanceof Error ? ev.reason : new Error(String(ev.reason && ev.reason.message || ev.reason || 'خطأ غير متوقع'));
+  showRenderError(err);
+});
 
 /* patch: add quick-add entry point into admin sections choice modal already includes startQuickAddSection */
 function startQuickAddSection(){ nav('admin-quick-add'); }
